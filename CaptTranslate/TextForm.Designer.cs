@@ -29,7 +29,17 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TextForm));
+            label1 = new Label();
             SuspendLayout();
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(38, 15);
+            label1.TabIndex = 0;
+            label1.Text = "label1";
             // 
             // TextForm
             // 
@@ -37,6 +47,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(381, 149);
             ControlBox = false;
+            Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TextForm";
@@ -45,8 +56,11 @@
             TopMost = true;
             Deactivate += TextForm_Deactivate;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Label label1;
     }
 }

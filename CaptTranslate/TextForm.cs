@@ -12,31 +12,31 @@ namespace CaptTranslate
             this.KeyDown += ScreenForm_KeyDown;
             this.Location = Form1.TextPoint;
             this.Size = new System.Drawing.Size(Form1.SelectedArea.Width, Form1.SelectedArea.Height);
-
             string text = TextRecognizer.Recognize(ScreenManager.ImageToByte(ScreenManager.FileName));
             text = TextRecognizer.ClearText(text);
+            float fontSize = Settings.FontSize;
 
-            Label label1 = new Label
-            {
-                Text = text,
-                AutoSize = false,
-                Dock = DockStyle.Fill,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Arial", Settings.FontSize),
-                ForeColor = Color.Black,
-                BackColor = Color.Transparent
-            };
-            this.Controls.Add(label1);
-
-            if (Settings.Translate)
+            label1.Text = text;
+            label1.AutoSize = false;
+            label1.Dock = DockStyle.Fill;
+            label1.TextAlign = ContentAlignment.MiddleCenter;
+            label1.Font = new Font("Arial", fontSize);
+            //label1.ForeColor = Color.Black;
+            //label1.BackColor = Color.Transparent;
+            
+            if (Settings.Translate && text != string.Empty)
                 label1.Text = TranslateManager.Translate(text, ListData.GetTranslator(Settings.Translator));
         }
-
 
         private void ScreenForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {
+                this.Close();
+            }
+            if(e.Control && e.KeyCode == Keys.C)
+            {
+                Clipboard.SetText(label1.Text);
                 this.Close();
             }
         }

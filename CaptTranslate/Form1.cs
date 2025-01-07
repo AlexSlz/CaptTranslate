@@ -11,7 +11,7 @@ namespace CaptTranslate
             InitializeComponent();
             TextRecognizer.InitializeModel();
             _hotKeyManager = new HotKeyManager(Handle);
-            _hotKeyManager.AddHotKey(HotKeyManager.MOD_CTRL | HotKeyManager.MOD_SHIFT, (int)Keys.S, OpenScreenForm);
+            _hotKeyManager.AddHotKey(Settings.ModKEY, Settings.Key, OpenScreenForm);
 
 
             comboBox1.Items.AddRange(Enum.GetNames(typeof(ListData.Translator)));
@@ -24,12 +24,43 @@ namespace CaptTranslate
 
             checkBox1.Checked = Settings.Translate;
             checkBox2.Checked = Settings.ScaleImage;
+            checkBox4.Checked = Settings.AutoSize;
         }
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            string keyCombination = "";
+            Settings.ModKEY = 0;
+            if (e.Control)
+            {
+                keyCombination += "Ctrl + ";
+                Settings.ModKEY += 2;
+            }
+            if (e.Shift)
+            {
+                keyCombination += "Shift + ";
+                Settings.ModKEY += 4;
+            }
+            if (e.Alt)
+            {
+                keyCombination += "Alt + ";
+                Settings.ModKEY += 1;
+            }
+            keyCombination += e.KeyCode.ToString();
+            Settings.Key = e.KeyValue;
 
+            label4.Text = keyCombination;
+        }
         private void OpenScreenForm()
         {
             FormManager.OpenForm<ScreenForm>();
-            FormManager.AfterClose += FormManager.OpenForm<TextForm>;
+            FormManager.AfterClose += () =>
+            {
+                if (!File.Exists(ScreenManager.FileName))
+                {
+                    return;
+                }
+                FormManager.OpenForm<TextForm>();
+            };
         }
 
         protected override void WndProc(ref Message m)
@@ -95,6 +126,30 @@ namespace CaptTranslate
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             Settings.ScaleImage = checkBox2.Checked;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            _hotKeyManager.UpdateHotKey(Settings.ModKEY, Settings.Key, OpenScreenForm);
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            this.KeyPreview = checkBox3.Checked;
+            if (checkBox3.Checked)
+            {
+                this.KeyDown += new KeyEventHandler(MainForm_KeyDown);
+            }
+            else
+            {
+                this.KeyDown -= new KeyEventHandler(MainForm_KeyDown);
+                _hotKeyManager.UpdateHotKey(Settings.ModKEY, Settings.Key, OpenScreenForm);
+            }
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.AutoSize = checkBox4.Checked;
         }
     }
 }

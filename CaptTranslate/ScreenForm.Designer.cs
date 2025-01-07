@@ -41,7 +41,7 @@
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ScreenForm";
-            Opacity = 0.2D;
+            Opacity = 0.3D;
             TopMost = true;
             WindowState = FormWindowState.Maximized;
             ResumeLayout(false);

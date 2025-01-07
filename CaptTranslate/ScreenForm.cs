@@ -10,6 +10,7 @@ namespace CaptTranslate
             this.KeyDown += ScreenForm_KeyDown;
             this.MouseClick += ScreenForm_MouseClick;
             this.DoubleBuffered = true;
+            File.Delete(ScreenManager.FileName);
         }
 
         private void ScreenForm_MouseClick(object sender, MouseEventArgs e)
@@ -55,6 +56,7 @@ namespace CaptTranslate
 
         private void CaptureScreen()
         {
+            this.Opacity = 0;
             Form1.SelectedArea = _selectedArea;
             Form1.TextPoint = _startPoint;
             ScreenManager.CaptureScreen();

@@ -41,6 +41,14 @@ namespace CaptTranslate
                 MessageBox.Show("Reg error.");
             }
         }
+
+        public void UpdateHotKey(int modifier, int key, Action action)
+        {
+            int id = _actions.First(item => item.Value == action).Key;
+            Unregister(id);
+            Register(id, modifier, key);
+        }
+
         public void ProcessHotKey(int hotKeyId)
         {
             if (_actions.ContainsKey(hotKeyId))

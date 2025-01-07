@@ -41,6 +41,9 @@
             comboBox2 = new ComboBox();
             checkBox1 = new CheckBox();
             checkBox2 = new CheckBox();
+            label4 = new Label();
+            checkBox3 = new CheckBox();
+            checkBox4 = new CheckBox();
             contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
@@ -148,11 +151,46 @@
             checkBox2.UseVisualStyleBackColor = true;
             checkBox2.CheckedChanged += checkBox2_CheckedChanged;
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(244, 87);
+            label4.Name = "label4";
+            label4.Size = new Size(63, 25);
+            label4.TabIndex = 9;
+            label4.Text = "label4";
+            // 
+            // checkBox3
+            // 
+            checkBox3.AutoSize = true;
+            checkBox3.Location = new Point(244, 121);
+            checkBox3.Name = "checkBox3";
+            checkBox3.Size = new Size(156, 29);
+            checkBox3.TabIndex = 11;
+            checkBox3.Text = "ChangeHotKey";
+            checkBox3.UseVisualStyleBackColor = true;
+            checkBox3.CheckedChanged += checkBox3_CheckedChanged;
+            // 
+            // checkBox4
+            // 
+            checkBox4.AutoSize = true;
+            checkBox4.Enabled = false;
+            checkBox4.Location = new Point(313, 48);
+            checkBox4.Name = "checkBox4";
+            checkBox4.Size = new Size(105, 29);
+            checkBox4.TabIndex = 12;
+            checkBox4.Text = "AutoSize";
+            checkBox4.UseVisualStyleBackColor = true;
+            checkBox4.CheckedChanged += checkBox4_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(617, 156);
+            Controls.Add(checkBox4);
+            Controls.Add(checkBox3);
+            Controls.Add(label4);
             Controls.Add(checkBox2);
             Controls.Add(checkBox1);
             Controls.Add(label3);
@@ -186,5 +224,8 @@
         private ComboBox comboBox2;
         private CheckBox checkBox1;
         private CheckBox checkBox2;
+        private Label label4;
+        private CheckBox checkBox3;
+        private CheckBox checkBox4;
     }
 }

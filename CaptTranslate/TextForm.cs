@@ -10,20 +10,24 @@ namespace CaptTranslate
         {
             InitializeComponent();
             this.KeyDown += ScreenForm_KeyDown;
-            this.Location = Form1.TextPoint;
-            this.Size = new System.Drawing.Size(Form1.SelectedArea.Width, Form1.SelectedArea.Height);
+            this.Location = ImageData.TextPoint;
+            this.Size = ImageData.SelectedArea.Size;
             string text = TextRecognizer.Recognize(ScreenManager.ImageToByte(ScreenManager.FileName));
             text = TextRecognizer.ClearText(text);
             float fontSize = Settings.FontSize;
-
             label1.Text = text;
             label1.AutoSize = false;
             label1.Dock = DockStyle.Fill;
             label1.TextAlign = ContentAlignment.MiddleCenter;
+
             label1.Font = new Font("Arial", fontSize);
-            //label1.ForeColor = Color.Black;
-            //label1.BackColor = Color.Transparent;
-            
+
+            if (Settings.AutoColor)
+            {
+                label1.ForeColor = ImageData.TextColor;
+                label1.BackColor = Color.Transparent;
+                this.BackColor = ImageData.BackgroundColor;
+            }
             if (Settings.Translate && text != string.Empty)
                 label1.Text = TranslateManager.Translate(text, ListData.GetTranslator(Settings.Translator));
         }

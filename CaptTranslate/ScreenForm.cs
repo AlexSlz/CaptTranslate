@@ -57,8 +57,8 @@ namespace CaptTranslate
         private void CaptureScreen()
         {
             this.Opacity = 0;
-            Form1.SelectedArea = _selectedArea;
-            Form1.TextPoint = _startPoint;
+            ImageData.SelectedArea = _selectedArea;
+            ImageData.TextPoint = _startPoint;
             ScreenManager.CaptureScreen();
             this.Close();
             /*

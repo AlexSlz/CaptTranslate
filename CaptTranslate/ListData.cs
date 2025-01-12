@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Sdcb.PaddleOCR.Models;
+using Sdcb.PaddleOCR.Models.Local;
 
 namespace CaptTranslate
 {
@@ -28,7 +25,36 @@ namespace CaptTranslate
 
         public enum Language
         {
-            English
+            English,
+            Chinese,
+            Korean
         };
+
+        public static FullOcrModel GetLanguageModel(Language language)
+        {
+            switch (language)
+            {
+                default:
+                case Language.English:
+                    return LocalFullModels.EnglishV4;
+                case Language.Chinese:
+                    return LocalFullModels.ChineseV4;
+                case Language.Korean:
+                    return LocalFullModels.KoreanV4;
+            }
+        }
+        public static string GetLanguage(Language language)
+        {
+            switch (language)
+            {
+                default:
+                case Language.English:
+                    return "en";
+                case Language.Chinese:
+                    return "cn";
+                case Language.Korean:
+                    return "kr";
+            }
+        }
     }
 }

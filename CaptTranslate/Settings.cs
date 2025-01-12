@@ -12,6 +12,7 @@ namespace CaptTranslate
         public static bool Translate = true;
         public static bool ScaleImage = true;
         public static bool AutoSize = false;
+        public static bool AutoColor = true;
         public static ListData.Translator Translator = ListData.Translator.Google;
         public static ListData.Language Language = ListData.Language.English;
 

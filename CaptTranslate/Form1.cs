@@ -3,8 +3,6 @@ namespace CaptTranslate
     public partial class Form1 : Form
     {
         private HotKeyManager _hotKeyManager;
-        public static Rectangle SelectedArea;
-        public static Point TextPoint;
 
         public Form1()
         {
@@ -25,6 +23,7 @@ namespace CaptTranslate
             checkBox1.Checked = Settings.Translate;
             checkBox2.Checked = Settings.ScaleImage;
             checkBox4.Checked = Settings.AutoSize;
+            checkBox5.Checked = Settings.AutoColor;
         }
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -116,6 +115,7 @@ namespace CaptTranslate
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.Language = (ListData.Language)comboBox2.SelectedIndex;
+            TextRecognizer.InitializeModel();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -150,6 +150,11 @@ namespace CaptTranslate
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
             Settings.AutoSize = checkBox4.Checked;
+        }
+
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.AutoColor = checkBox5.Checked;
         }
     }
 }

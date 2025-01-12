@@ -44,6 +44,7 @@
             label4 = new Label();
             checkBox3 = new CheckBox();
             checkBox4 = new CheckBox();
+            checkBox5 = new CheckBox();
             contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
@@ -143,7 +144,7 @@
             // checkBox2
             // 
             checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(12, 121);
+            checkBox2.Location = new Point(14, 121);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(127, 29);
             checkBox2.TabIndex = 8;
@@ -154,16 +155,16 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(244, 87);
+            label4.Location = new Point(288, 87);
             label4.Name = "label4";
-            label4.Size = new Size(63, 25);
+            label4.Size = new Size(136, 25);
             label4.TabIndex = 9;
-            label4.Text = "label4";
+            label4.Text = "Ctrl + Shift + S";
             // 
             // checkBox3
             // 
             checkBox3.AutoSize = true;
-            checkBox3.Location = new Point(244, 121);
+            checkBox3.Location = new Point(126, 86);
             checkBox3.Name = "checkBox3";
             checkBox3.Size = new Size(156, 29);
             checkBox3.TabIndex = 11;
@@ -183,11 +184,23 @@
             checkBox4.UseVisualStyleBackColor = true;
             checkBox4.CheckedChanged += checkBox4_CheckedChanged;
             // 
+            // checkBox5
+            // 
+            checkBox5.AutoSize = true;
+            checkBox5.Location = new Point(422, 48);
+            checkBox5.Name = "checkBox5";
+            checkBox5.Size = new Size(117, 29);
+            checkBox5.TabIndex = 13;
+            checkBox5.Text = "AutoColor";
+            checkBox5.UseVisualStyleBackColor = true;
+            checkBox5.CheckedChanged += checkBox5_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(617, 156);
+            Controls.Add(checkBox5);
             Controls.Add(checkBox4);
             Controls.Add(checkBox3);
             Controls.Add(label4);
@@ -203,7 +216,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(5);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Alex";
             Move += Form1_Move;
             contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
@@ -227,5 +240,6 @@
         private Label label4;
         private CheckBox checkBox3;
         private CheckBox checkBox4;
+        private CheckBox checkBox5;
     }
 }

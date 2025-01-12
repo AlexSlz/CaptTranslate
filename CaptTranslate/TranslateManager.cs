@@ -22,7 +22,7 @@ namespace CaptTranslate
         }
         public static async Task<string> TranslateMyMemory(string text)
         {
-            string url = $"http://api.mymemory.translated.net/get?q={Uri.EscapeDataString(text)}&langpair=en|ru";
+            string url = $"http://api.mymemory.translated.net/get?q={Uri.EscapeDataString(text)}&langpair={ListData.GetLanguage(Settings.Language)}|ru";
             using (var httpClient = new HttpClient())
             {
                 HttpResponseMessage res = await httpClient.GetAsync(url);

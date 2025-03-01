@@ -40,11 +40,9 @@
             label3 = new Label();
             comboBox2 = new ComboBox();
             checkBox1 = new CheckBox();
-            checkBox2 = new CheckBox();
             label4 = new Label();
             checkBox3 = new CheckBox();
             checkBox4 = new CheckBox();
-            checkBox5 = new CheckBox();
             contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
@@ -141,21 +139,10 @@
             checkBox1.UseVisualStyleBackColor = true;
             checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
-            // checkBox2
-            // 
-            checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(14, 121);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(127, 29);
-            checkBox2.TabIndex = 8;
-            checkBox2.Text = "ScaleImage";
-            checkBox2.UseVisualStyleBackColor = true;
-            checkBox2.CheckedChanged += checkBox2_CheckedChanged;
-            // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(288, 87);
+            label4.Location = new Point(276, 87);
             label4.Name = "label4";
             label4.Size = new Size(136, 25);
             label4.TabIndex = 9;
@@ -175,36 +162,22 @@
             // checkBox4
             // 
             checkBox4.AutoSize = true;
-            checkBox4.Enabled = false;
             checkBox4.Location = new Point(313, 48);
             checkBox4.Name = "checkBox4";
-            checkBox4.Size = new Size(105, 29);
+            checkBox4.Size = new Size(160, 29);
             checkBox4.TabIndex = 12;
-            checkBox4.Text = "AutoSize";
+            checkBox4.Text = "RememberCapt";
             checkBox4.UseVisualStyleBackColor = true;
             checkBox4.CheckedChanged += checkBox4_CheckedChanged;
-            // 
-            // checkBox5
-            // 
-            checkBox5.AutoSize = true;
-            checkBox5.Location = new Point(422, 48);
-            checkBox5.Name = "checkBox5";
-            checkBox5.Size = new Size(117, 29);
-            checkBox5.TabIndex = 13;
-            checkBox5.Text = "AutoColor";
-            checkBox5.UseVisualStyleBackColor = true;
-            checkBox5.CheckedChanged += checkBox5_CheckedChanged;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(617, 156);
-            Controls.Add(checkBox5);
+            ClientSize = new Size(617, 118);
             Controls.Add(checkBox4);
             Controls.Add(checkBox3);
             Controls.Add(label4);
-            Controls.Add(checkBox2);
             Controls.Add(checkBox1);
             Controls.Add(label3);
             Controls.Add(comboBox2);
@@ -236,10 +209,8 @@
         private Label label3;
         private ComboBox comboBox2;
         private CheckBox checkBox1;
-        private CheckBox checkBox2;
         private Label label4;
         private CheckBox checkBox3;
         private CheckBox checkBox4;
-        private CheckBox checkBox5;
     }
 }

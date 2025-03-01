@@ -1,6 +1,6 @@
 ﻿namespace CaptTranslate
 {
-    partial class ScreenForm
+    partial class SelectForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScreenForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectForm));
             SuspendLayout();
             // 
-            // ScreenForm
+            // SelectForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -40,8 +40,8 @@
             ControlBox = false;
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "ScreenForm";
-            Opacity = 0.3D;
+            Name = "SelectForm";
+            Opacity = 0.2D;
             TopMost = true;
             WindowState = FormWindowState.Maximized;
             ResumeLayout(false);

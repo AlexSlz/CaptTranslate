@@ -2,9 +2,9 @@
 
 namespace CaptTranslate
 {
-    public partial class ScreenForm : Form
+    public partial class SelectForm : Form
     {
-        public ScreenForm()
+        public SelectForm()
         {
             InitializeComponent();
             this.KeyDown += ScreenForm_KeyDown;
@@ -28,6 +28,7 @@ namespace CaptTranslate
                 this.Close();
             }
         }
+
         private Point _startPoint;
         private Rectangle _selectedArea;
         protected override void OnMouseDown(MouseEventArgs e)
@@ -59,7 +60,7 @@ namespace CaptTranslate
             this.Opacity = 0;
             ImageData.SelectedArea = _selectedArea;
             ImageData.TextPoint = _startPoint;
-            ScreenManager.CaptureScreen();
+            //ScreenManager.CaptureScreen();
             this.Close();
             /*
             if (_selectedArea.Width > 0 && _selectedArea.Height > 0)

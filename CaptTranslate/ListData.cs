@@ -29,20 +29,6 @@ namespace CaptTranslate
             Chinese,
             Korean
         };
-
-        public static FullOcrModel GetLanguageModel(Language language)
-        {
-            switch (language)
-            {
-                default:
-                case Language.English:
-                    return LocalFullModels.EnglishV4;
-                case Language.Chinese:
-                    return LocalFullModels.ChineseV4;
-                case Language.Korean:
-                    return LocalFullModels.KoreanV4;
-            }
-        }
         public static string GetLanguage(Language language)
         {
             switch (language)

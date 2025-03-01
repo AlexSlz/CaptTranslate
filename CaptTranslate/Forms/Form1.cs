@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace CaptTranslate
 {
     public partial class Form1 : Form
@@ -7,7 +9,6 @@ namespace CaptTranslate
         public Form1()
         {
             InitializeComponent();
-            TextRecognizer.InitializeModel();
             _hotKeyManager = new HotKeyManager(Handle);
             _hotKeyManager.AddHotKey(Settings.ModKEY, Settings.Key, OpenScreenForm);
 
@@ -21,10 +22,9 @@ namespace CaptTranslate
             numericUpDown1.Value = Settings.FontSize;
 
             checkBox1.Checked = Settings.Translate;
-            checkBox2.Checked = Settings.ScaleImage;
-            checkBox4.Checked = Settings.AutoSize;
-            checkBox5.Checked = Settings.AutoColor;
+            checkBox4.Checked = Settings.RememberCapt;
         }
+
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             string keyCombination = "";
@@ -49,17 +49,23 @@ namespace CaptTranslate
 
             label4.Text = keyCombination;
         }
+        bool CanCapt;
         private void OpenScreenForm()
         {
-            FormManager.OpenForm<ScreenForm>();
-            FormManager.AfterClose += () =>
+            if (CanCapt)
             {
-                if (!File.Exists(ScreenManager.FileName))
+                FormManager.OpenForm<SelectForm>();
+                FormManager.AfterClose += () =>
                 {
-                    return;
-                }
+                    FormManager.OpenForm<TextForm>();
+                    if(Settings.RememberCapt)
+                        CanCapt = false;
+                };
+            }
+            else
+            {
                 FormManager.OpenForm<TextForm>();
-            };
+            }
         }
 
         protected override void WndProc(ref Message m)
@@ -115,17 +121,12 @@ namespace CaptTranslate
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.Language = (ListData.Language)comboBox2.SelectedIndex;
-            TextRecognizer.InitializeModel();
+            TextRecognizer.SelectModel(Settings.Language);
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Translate = checkBox1.Checked;
-        }
-
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.ScaleImage = checkBox2.Checked;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -149,12 +150,8 @@ namespace CaptTranslate
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.AutoSize = checkBox4.Checked;
-        }
-
-        private void checkBox5_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.AutoColor = checkBox5.Checked;
+            Settings.RememberCapt = checkBox4.Checked;
+            CanCapt = true;
         }
     }
 }

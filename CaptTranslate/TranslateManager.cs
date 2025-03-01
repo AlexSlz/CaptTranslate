@@ -11,21 +11,22 @@ namespace CaptTranslate
 {
     internal class TranslateManager
     {
+        private static string translateTarget = "ru";
         public static async Task<string> TranslateGoogle(string text)
         {
-            var to = "ru";
-            var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={to}&dt=t&q={HttpUtility.UrlEncode(text)}";
-
-            using var client = new HttpClient();
-            var response = await client.GetStringAsync(url).ConfigureAwait(false);
-            return string.Join(string.Empty, JArray.Parse(response)[0].Select(x => x[0]));
+            string url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={translateTarget}&dt=t&q={HttpUtility.UrlEncode(text)}";
+            using(var client = new HttpClient())
+            {
+                var response = await client.GetStringAsync(url).ConfigureAwait(false);
+                return string.Join(string.Empty, JArray.Parse(response)[0].Select(x => x[0]));
+            }
         }
         public static async Task<string> TranslateMyMemory(string text)
         {
-            string url = $"http://api.mymemory.translated.net/get?q={Uri.EscapeDataString(text)}&langpair={ListData.GetLanguage(Settings.Language)}|ru";
-            using (var httpClient = new HttpClient())
+            string url = $"http://api.mymemory.translated.net/get?q={Uri.EscapeDataString(text)}&langpair={ListData.GetLanguage(Settings.Language)}|{translateTarget}";
+            using (var client = new HttpClient())
             {
-                HttpResponseMessage res = await httpClient.GetAsync(url);
+                HttpResponseMessage res = await client.GetAsync(url);
                 res.EnsureSuccessStatusCode();
 
                 string responseJson = await res.Content.ReadAsStringAsync();

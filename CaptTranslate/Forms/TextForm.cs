@@ -9,6 +9,9 @@ namespace CaptTranslate
         public TextForm()
         {
             InitializeComponent();
+
+            ScreenManager.CaptureScreen();
+
             this.KeyDown += ScreenForm_KeyDown;
             this.Location = ImageData.TextPoint;
             this.Size = ImageData.SelectedArea.Size;
@@ -22,12 +25,6 @@ namespace CaptTranslate
 
             label1.Font = new Font("Arial", fontSize);
 
-            if (Settings.AutoColor)
-            {
-                label1.ForeColor = ImageData.TextColor;
-                label1.BackColor = Color.Transparent;
-                this.BackColor = ImageData.BackgroundColor;
-            }
             if (Settings.Translate && text != string.Empty)
                 label1.Text = TranslateManager.Translate(text, ListData.GetTranslator(Settings.Translator));
         }

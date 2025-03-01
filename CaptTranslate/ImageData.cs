@@ -10,7 +10,5 @@ namespace CaptTranslate
     {
         public static Rectangle SelectedArea;
         public static Point TextPoint;
-        public static Color TextColor;
-        public static Color BackgroundColor;
     }
 }

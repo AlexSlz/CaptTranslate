@@ -10,5 +10,6 @@ namespace CaptTranslate
     {
         public static Rectangle SelectedArea;
         public static Point TextPoint;
+        public static bool CanCaptScreen;
     }
 }

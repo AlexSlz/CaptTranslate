@@ -10,6 +10,7 @@ namespace CaptTranslate
             this.KeyDown += ScreenForm_KeyDown;
             this.MouseClick += ScreenForm_MouseClick;
             this.DoubleBuffered = true;
+            ImageData.CanCaptScreen = false;
             File.Delete(ScreenManager.FileName);
         }
 
@@ -60,6 +61,7 @@ namespace CaptTranslate
             this.Opacity = 0;
             ImageData.SelectedArea = _selectedArea;
             ImageData.TextPoint = _startPoint;
+            ImageData.CanCaptScreen = true;
             //ScreenManager.CaptureScreen();
             this.Close();
             /*

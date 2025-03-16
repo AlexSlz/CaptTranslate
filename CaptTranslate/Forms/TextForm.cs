@@ -9,14 +9,16 @@ namespace CaptTranslate
         public TextForm()
         {
             InitializeComponent();
-
-            ScreenManager.CaptureScreen();
+            string text = "";
+            if (ScreenManager.CaptureScreen() != null)
+            {
+                text = TextRecognizer.Recognize(ScreenManager.ImageToByte(ScreenManager.FileName));
+                text = TextRecognizer.ClearText(text);
+            }
 
             this.KeyDown += ScreenForm_KeyDown;
             this.Location = ImageData.TextPoint;
             this.Size = ImageData.SelectedArea.Size;
-            string text = TextRecognizer.Recognize(ScreenManager.ImageToByte(ScreenManager.FileName));
-            text = TextRecognizer.ClearText(text);
             float fontSize = Settings.FontSize;
             label1.Text = text;
             label1.AutoSize = false;

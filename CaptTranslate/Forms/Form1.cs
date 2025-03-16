@@ -49,14 +49,19 @@ namespace CaptTranslate
 
             label4.Text = keyCombination;
         }
-        bool CanCapt;
+        bool CanCapt = true;
         private void OpenScreenForm()
         {
+            if (checkBox3.Checked)
+                return;
+
             if (CanCapt)
             {
                 FormManager.OpenForm<SelectForm>();
                 FormManager.AfterClose += () =>
                 {
+                    if (!ImageData.CanCaptScreen)
+                        return;
                     FormManager.OpenForm<TextForm>();
                     if(Settings.RememberCapt)
                         CanCapt = false;

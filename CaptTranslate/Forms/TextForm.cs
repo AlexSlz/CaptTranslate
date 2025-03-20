@@ -13,7 +13,6 @@ namespace CaptTranslate
             if (ScreenManager.CaptureScreen() != null)
             {
                 text = TextRecognizer.Recognize(ScreenManager.ImageToByte(ScreenManager.FileName));
-                text = TextRecognizer.ClearText(text);
             }
 
             this.KeyDown += ScreenForm_KeyDown;

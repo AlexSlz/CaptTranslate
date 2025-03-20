@@ -8,7 +8,7 @@ namespace CaptTranslate
 {
     internal static class Settings
     {
-        public static int FontSize = 14;
+        public static int FontSize = 20;
         public static bool Translate = true;
         public static bool RememberCapt = false;
 

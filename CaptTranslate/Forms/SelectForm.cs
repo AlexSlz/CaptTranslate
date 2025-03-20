@@ -11,7 +11,8 @@ namespace CaptTranslate
             this.MouseClick += ScreenForm_MouseClick;
             this.DoubleBuffered = true;
             ImageData.CanCaptScreen = false;
-            File.Delete(ScreenManager.FileName);
+            if(File.Exists(ScreenManager.FileName))
+                File.Delete(ScreenManager.FileName);
         }
 
         private void ScreenForm_MouseClick(object sender, MouseEventArgs e)

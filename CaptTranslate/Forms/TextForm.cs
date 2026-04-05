@@ -1,51 +1,123 @@
-﻿
-using static System.Net.Mime.MediaTypeNames;
-using Point = System.Drawing.Point;
+﻿using System;
+using System.Drawing;
+using System.Threading;
+using System.Windows.Forms;
 
-namespace CaptTranslate
+namespace CaptTranslate;
+
+public partial class TextForm : Form
 {
-    public partial class TextForm : Form
+    private readonly MyLabel _myLabel;
+    private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+    private bool _translated = false;
+    private string _recognizedText;
+    private string _translatedText;
+    
+    
+    public TextForm()
     {
-        public TextForm()
+        InitializeComponent();
+        this.KeyPreview = true;
+        this.KeyDown += ScreenForm_KeyDown;
+        this.StartPosition = FormStartPosition.Manual;
+        var borderSize = SystemInformation.FrameBorderSize.Width;
+        var captionHeight = SystemInformation.CaptionHeight;
+        
+        this.Location = new Point(
+            ImageData.TextPoint.X - borderSize, 
+            ImageData.TextPoint.Y - captionHeight - borderSize
+        );
+        this.ClientSize = ImageData.SelectedArea.Size;
+        _myLabel = new MyLabel { Dock = DockStyle.Fill };
+        this.Controls.Add(_myLabel);
+
+        this.FormClosing += OnClose;
+    }
+    
+    private void OnClose(object sender, FormClosingEventArgs e)
+    {
+        _myLabel.MouseClick -= SwitchText;
+        _cts.Cancel();
+    }
+
+    protected override void OnShown(EventArgs e)
+    {
+        base.OnShown(e);
+        Recognize();
+    }
+
+    private async void Recognize()
+    {
+        this.Cursor = Cursors.WaitCursor; 
+        try
         {
-            InitializeComponent();
-            string text = "";
-            if (ScreenManager.CaptureScreen() != null)
-            {
-                text = TextRecognizer.Recognize(ScreenManager.ImageToByte(ScreenManager.FileName));
-            }
-
-            this.KeyDown += ScreenForm_KeyDown;
-            this.Location = ImageData.TextPoint;
-            this.Size = ImageData.SelectedArea.Size;
-            float fontSize = Settings.FontSize;
-            label1.Text = text;
-            label1.AutoSize = false;
-            label1.Dock = DockStyle.Fill;
-            label1.TextAlign = ContentAlignment.MiddleCenter;
-
-            label1.Font = new Font("Arial", fontSize);
-
-            if (Settings.Translate && text != string.Empty)
-                label1.Text = TranslateManager.Translate(text, ListData.GetTranslator(Settings.Translator));
+            var engine = StaticData.GetRecognizer();
+            var data = ScreenManager.ImageToByte(ScreenManager.FileName);
+            
+            var result = await engine.ARecognize(data, _cts.Token);
+            if (result.IsError || this.IsDisposed || _myLabel.IsDisposed) return;
+            
+            _recognizedText = result.Text;
         }
-
-        private void ScreenForm_KeyDown(object sender, KeyEventArgs e)
+        finally 
         {
-            if (e.KeyCode == Keys.Escape)
-            {
-                this.Close();
-            }
-            if(e.Control && e.KeyCode == Keys.C)
-            {
-                Clipboard.SetText(label1.Text);
-                this.Close();
-            }
+            this.Cursor = Cursors.Default;
+            _myLabel.Text = _recognizedText;
         }
+        
+        if (Settings.Singleton.Translate)
+        {
+            Translate();
+            _translated = true;
+        }
+        _myLabel.MouseClick += SwitchText;
+    }
 
-        private void TextForm_Deactivate(object sender, EventArgs e)
+    private void SwitchText(object sender = null, MouseEventArgs e = null)
+    {
+        _translated = !_translated;
+        if(string.IsNullOrEmpty(_translatedText))
+        {
+            Translate();
+            return;
+        }
+        _myLabel.Text = _translated ? _translatedText : _recognizedText;
+    }
+    
+    private async void Translate()
+    {
+        this.Cursor = Cursors.WaitCursor;
+        try
+        {
+            var translator = StaticData.GetTranslator();
+            var result = await translator.Translate(_myLabel.Text);
+            
+            if (result.IsError || this.IsDisposed || _myLabel.IsDisposed) return;
+            _translatedText = result.Text;
+            _myLabel.Text = _translatedText;
+        }
+        finally 
+        { 
+            this.Cursor = Cursors.Default;
+        }
+    }
+
+    private void ScreenForm_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Escape)
         {
             this.Close();
         }
+        if(e.Control && e.KeyCode == Keys.C)
+        {
+            Clipboard.SetText(_myLabel.Text);
+            this.Close();
+        }
+    }
+
+    private void TextForm_Deactivate(object sender, EventArgs e)
+    {
+        //this.Close();
     }
 }
+

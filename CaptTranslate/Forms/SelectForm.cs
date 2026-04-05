@@ -1,23 +1,48 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
-namespace CaptTranslate
-{
+namespace CaptTranslate;
+
     public partial class SelectForm : Form
     {
+        private Point _startPoint;
+        private Rectangle _selectedArea;
         public SelectForm()
         {
             InitializeComponent();
-            this.KeyDown += ScreenForm_KeyDown;
-            this.MouseClick += ScreenForm_MouseClick;
-            this.DoubleBuffered = true;
-            ImageData.CanCaptScreen = false;
-            if(File.Exists(ScreenManager.FileName))
+
+            this.KeyPreview = true;
+
+            KeyDown += ScreenForm_KeyDown;
+            MouseClick += ScreenForm_MouseClick;
+            
+            Rectangle allScreensBounds = Rectangle.Empty;
+
+            foreach (var screen in Screen.AllScreens)
+            {
+                allScreensBounds = Rectangle.Union(allScreensBounds, screen.Bounds);
+            }
+
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = allScreensBounds.Location;
+            this.Size = allScreensBounds.Size;
+            
+            DoubleBuffered = true;
+
+            if (File.Exists(ScreenManager.FileName))
                 File.Delete(ScreenManager.FileName);
+
+            Cursor = Cursors.Cross;
+
+            ImageData.IsSuccess = false;
+
         }
 
         private void ScreenForm_MouseClick(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right)
             {
                 this.Close();
             }
@@ -31,64 +56,48 @@ namespace CaptTranslate
             }
         }
 
-        private Point _startPoint;
-        private Rectangle _selectedArea;
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            _startPoint = e.Location;
+            if (e.Button == MouseButtons.Left)
+                _startPoint = e.Location;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (!_startPoint.IsEmpty)
+            if (e.Button == MouseButtons.Left && !_startPoint.IsEmpty)
             {
-                _selectedArea = new Rectangle(Math.Min(_startPoint.X, e.X),
-                                             Math.Min(_startPoint.Y, e.Y),
-                                             Math.Abs(_startPoint.X - e.X),
-                                             Math.Abs(_startPoint.Y - e.Y));
+                _selectedArea = new Rectangle(
+                    Math.Min(_startPoint.X, e.X),
+                    Math.Min(_startPoint.Y, e.Y),
+                    Math.Abs(_startPoint.X - e.X),
+                    Math.Abs(_startPoint.Y - e.Y));
+
                 this.Invalidate();
             }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            this.Cursor = Cursors.Default;
-            this.Invalidate();
-            CaptureScreen();
-        }
+            if (_startPoint.IsEmpty && (_selectedArea.Width <= 0 && _selectedArea.Height <= 0))
+                return;
 
-        private void CaptureScreen()
-        {
-            this.Opacity = 0;
+            this.Cursor = Cursors.Default;
+            
+            ImageData.IsSuccess = true;
             ImageData.SelectedArea = _selectedArea;
-            ImageData.TextPoint = _startPoint;
-            ImageData.CanCaptScreen = true;
-            //ScreenManager.CaptureScreen();
+            ImageData.TextPoint = this.PointToScreen(_startPoint);
+            
+            GC.Collect();
             this.Close();
-            /*
-            if (_selectedArea.Width > 0 && _selectedArea.Height > 0)
-            {
-                this.Opacity = 0;
-                Bitmap screenshot = new Bitmap(_selectedArea.Width, _selectedArea.Height);
-                using (Graphics g = Graphics.FromImage(screenshot))
-                {
-                    g.CopyFromScreen(_selectedArea.Left, _selectedArea.Top, 0, 0, _selectedArea.Size);
-                }
-                Form1.SelectedArea = _selectedArea;
-                screenshot.Save("screenshot.png");
-                GC.Collect();
-                this.Close();
-            }
-            */
         }
+        
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (!_selectedArea.IsEmpty)
-            {
-                Pen pen = new Pen(Color.RebeccaPurple, 4);
-                e.Graphics.DrawRectangle(pen, _selectedArea);
-            }
+            base.OnPaint(e);
+
+            if (_selectedArea.IsEmpty) return;
+            using var pen = new Pen(Color.RebeccaPurple, 4);
+            e.Graphics.DrawRectangle(pen, _selectedArea);
         }
     }
-}

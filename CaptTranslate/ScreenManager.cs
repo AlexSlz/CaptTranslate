@@ -1,39 +1,44 @@
-﻿using OpenCvSharp;
-using Sdcb.PaddleInference;
-using Sdcb.PaddleOCR.Models.Local;
-using Sdcb.PaddleOCR.Models;
-using Sdcb.PaddleOCR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json.Serialization;
-using Newtonsoft.Json;
+﻿using System;
+using System.Drawing;
+using System.IO;
 
-namespace CaptTranslate
+namespace CaptTranslate;
+
+internal static class ScreenManager
 {
-    internal class ScreenManager
+    public const string FileName = "screenshot.png";
+
+    public static byte[] ImageToByte(string image)
     {
-        public static string FileName = "screenshot.png";
-        public static byte[] ImageToByte(string image)
-        {
-            return File.ReadAllBytes(image);
-        }
+        return File.ReadAllBytes(image);
+    }
 
-        public static string CaptureScreen()
-        {
-            if (ImageData.SelectedArea.IsEmpty)
-                return null;
+    // public static Point ScreenPosition()
+    // {
+    //     var mousePos = Cursor.Position;
+    //
+    //     var screen = Screen.FromPoint(mousePos);
+    //
+    //     return new Point(
+    //         screen.WorkingArea.Left,
+    //         screen.WorkingArea.Top
+    //     );
+    // }
 
-            using Bitmap screenshot = new Bitmap(ImageData.SelectedArea.Width, ImageData.SelectedArea.Height);
-            using (Graphics g = Graphics.FromImage(screenshot))
-            {
-                g.CopyFromScreen(ImageData.SelectedArea.Left, ImageData.SelectedArea.Top, 0, 0, ImageData.SelectedArea.Size, CopyPixelOperation.SourceCopy);
-            }
-            screenshot.Save(FileName);
-            GC.Collect();
-            return FileName;
+    public static string CaptureScreen()
+    {
+        var selectedArea = ImageData.SelectedArea;
+        if (selectedArea.IsEmpty)
+            return null;
+        
+        using var screenshot = new Bitmap(selectedArea.Width, selectedArea.Height);
+        using (var g = Graphics.FromImage(screenshot))
+        {
+            g.CopyFromScreen(selectedArea.Left, selectedArea.Top, 0, 0, selectedArea.Size, CopyPixelOperation.SourceCopy);
         }
+        screenshot.Save(FileName);
+        GC.Collect();
+        return FileName;
     }
 }
+

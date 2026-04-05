@@ -1,216 +1,165 @@
-﻿namespace CaptTranslate
+﻿namespace CaptTranslate;
+
+partial class Form1
 {
-    partial class Form1
+    /// <summary>
+    ///  Required designer variable.
+    /// </summary>
+    private System.ComponentModel.IContainer components = null;
+
+    /// <summary>
+    ///  Clean up any resources being used.
+    /// </summary>
+    /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+    protected override void Dispose(bool disposing)
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
+        if (disposing && (components != null))
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
+            components.Dispose();
         }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            notifyIcon1 = new NotifyIcon(components);
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            closeToolStripMenuItem = new ToolStripMenuItem();
-            comboBox1 = new ComboBox();
-            label1 = new Label();
-            label2 = new Label();
-            numericUpDown1 = new NumericUpDown();
-            label3 = new Label();
-            comboBox2 = new ComboBox();
-            checkBox1 = new CheckBox();
-            label4 = new Label();
-            checkBox3 = new CheckBox();
-            checkBox4 = new CheckBox();
-            contextMenuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
-            SuspendLayout();
-            // 
-            // notifyIcon1
-            // 
-            notifyIcon1.ContextMenuStrip = contextMenuStrip1;
-            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
-            notifyIcon1.Text = "notifyIcon1";
-            notifyIcon1.Visible = true;
-            notifyIcon1.MouseClick += notifyIcon1_MouseClick;
-            // 
-            // contextMenuStrip1
-            // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { closeToolStripMenuItem });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(104, 26);
-            // 
-            // closeToolStripMenuItem
-            // 
-            closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            closeToolStripMenuItem.Size = new Size(103, 22);
-            closeToolStripMenuItem.Text = "Close";
-            closeToolStripMenuItem.Click += closeToolStripMenuItem_Click;
-            // 
-            // comboBox1
-            // 
-            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(119, 6);
-            comboBox1.Margin = new Padding(5);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(188, 33);
-            comboBox1.TabIndex = 1;
-            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(14, 9);
-            label1.Margin = new Padding(5, 0, 5, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(95, 25);
-            label1.TabIndex = 2;
-            label1.Text = "Translator";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(14, 49);
-            label2.Margin = new Padding(5, 0, 5, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(83, 25);
-            label2.TabIndex = 3;
-            label2.Text = "FontSIze";
-            // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Location = new Point(119, 47);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(188, 33);
-            numericUpDown1.TabIndex = 4;
-            numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(317, 9);
-            label3.Margin = new Padding(5, 0, 5, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(95, 25);
-            label3.TabIndex = 6;
-            label3.Text = "Language";
-            // 
-            // comboBox2
-            // 
-            comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(422, 6);
-            comboBox2.Margin = new Padding(5);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(188, 33);
-            comboBox2.TabIndex = 5;
-            comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
-            // 
-            // checkBox1
-            // 
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(14, 86);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(106, 29);
-            checkBox1.TabIndex = 7;
-            checkBox1.Text = "Translate";
-            checkBox1.UseVisualStyleBackColor = true;
-            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(276, 87);
-            label4.Name = "label4";
-            label4.Size = new Size(136, 25);
-            label4.TabIndex = 9;
-            label4.Text = "Ctrl + Shift + S";
-            // 
-            // checkBox3
-            // 
-            checkBox3.AutoSize = true;
-            checkBox3.Location = new Point(126, 86);
-            checkBox3.Name = "checkBox3";
-            checkBox3.Size = new Size(156, 29);
-            checkBox3.TabIndex = 11;
-            checkBox3.Text = "ChangeHotKey";
-            checkBox3.UseVisualStyleBackColor = true;
-            checkBox3.CheckedChanged += checkBox3_CheckedChanged;
-            // 
-            // checkBox4
-            // 
-            checkBox4.AutoSize = true;
-            checkBox4.Location = new Point(313, 48);
-            checkBox4.Name = "checkBox4";
-            checkBox4.Size = new Size(160, 29);
-            checkBox4.TabIndex = 12;
-            checkBox4.Text = "RememberCapt";
-            checkBox4.UseVisualStyleBackColor = true;
-            checkBox4.CheckedChanged += checkBox4_CheckedChanged;
-            // 
-            // Form1
-            // 
-            AutoScaleDimensions = new SizeF(11F, 25F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(617, 118);
-            Controls.Add(checkBox4);
-            Controls.Add(checkBox3);
-            Controls.Add(label4);
-            Controls.Add(checkBox1);
-            Controls.Add(label3);
-            Controls.Add(comboBox2);
-            Controls.Add(numericUpDown1);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Controls.Add(comboBox1);
-            Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(5);
-            Name = "Form1";
-            Text = "Alex";
-            Move += Form1_Move;
-            contextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
-            ResumeLayout(false);
-            PerformLayout();
-        }
-
-        #endregion
-
-        private NotifyIcon notifyIcon1;
-        private ContextMenuStrip contextMenuStrip1;
-        private ToolStripMenuItem closeToolStripMenuItem;
-        private ComboBox comboBox1;
-        private Label label1;
-        private Label label2;
-        private NumericUpDown numericUpDown1;
-        private Label label3;
-        private ComboBox comboBox2;
-        private CheckBox checkBox1;
-        private Label label4;
-        private CheckBox checkBox3;
-        private CheckBox checkBox4;
+        base.Dispose(disposing);
     }
+
+    #region Windows Form Designer generated code
+
+    /// <summary>
+    /// Required method for Designer support - do not modify
+    /// the contents of this method with the code editor.
+    /// </summary>
+    private void InitializeComponent()
+    {
+        components = new System.ComponentModel.Container();
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+        contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(components);
+        closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        notifyIcon1 = new System.Windows.Forms.NotifyIcon(components);
+        OllamaButton = new System.Windows.Forms.Button();
+        labelModel = new System.Windows.Forms.Label();
+        treeViewModel = new System.Windows.Forms.TreeView();
+        checkBoxTranslate = new System.Windows.Forms.CheckBox();
+        checkBoxRemember = new System.Windows.Forms.CheckBox();
+        checkBoxKey = new System.Windows.Forms.CheckBox();
+        contextMenuStrip1.SuspendLayout();
+        SuspendLayout();
+        // 
+        // contextMenuStrip1
+        // 
+        contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { closeToolStripMenuItem });
+        contextMenuStrip1.Name = "contextMenuStrip1";
+        contextMenuStrip1.Size = new System.Drawing.Size(104, 26);
+        // 
+        // closeToolStripMenuItem
+        // 
+        closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+        closeToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+        closeToolStripMenuItem.Text = "Close";
+        closeToolStripMenuItem.Click += closeToolStripMenuItem_Click;
+        // 
+        // notifyIcon1
+        // 
+        notifyIcon1.ContextMenuStrip = contextMenuStrip1;
+        notifyIcon1.Icon = ((System.Drawing.Icon)resources.GetObject("notifyIcon1.Icon"));
+        notifyIcon1.Text = "Alex";
+        notifyIcon1.Visible = true;
+        notifyIcon1.MouseClick += notifyIcon1_MouseClick;
+        // 
+        // OllamaButton
+        // 
+        OllamaButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)204));
+        OllamaButton.Location = new System.Drawing.Point(369, 13);
+        OllamaButton.Margin = new System.Windows.Forms.Padding(4);
+        OllamaButton.Name = "OllamaButton";
+        OllamaButton.Size = new System.Drawing.Size(152, 33);
+        OllamaButton.TabIndex = 4;
+        OllamaButton.Text = "GetOllamaModels";
+        OllamaButton.UseVisualStyleBackColor = true;
+        OllamaButton.Click += OllamaButton_Click;
+        // 
+        // labelModel
+        // 
+        labelModel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)204));
+        labelModel.Location = new System.Drawing.Point(12, 365);
+        labelModel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+        labelModel.Name = "labelModel";
+        labelModel.Size = new System.Drawing.Size(350, 33);
+        labelModel.TabIndex = 5;
+        labelModel.Text = "Model";
+        labelModel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        // 
+        // treeViewModel
+        // 
+        treeViewModel.Location = new System.Drawing.Point(12, 12);
+        treeViewModel.Name = "treeViewModel";
+        treeViewModel.Size = new System.Drawing.Size(350, 350);
+        treeViewModel.TabIndex = 7;
+        treeViewModel.NodeMouseDoubleClick += treeViewModel_NodeMouseDoubleClick;
+        // 
+        // checkBoxTranslate
+        // 
+        checkBoxTranslate.Location = new System.Drawing.Point(369, 53);
+        checkBoxTranslate.Name = "checkBoxTranslate";
+        checkBoxTranslate.Size = new System.Drawing.Size(152, 24);
+        checkBoxTranslate.TabIndex = 8;
+        checkBoxTranslate.Text = "Translate";
+        checkBoxTranslate.UseVisualStyleBackColor = true;
+        // 
+        // checkBoxRemember
+        // 
+        checkBoxRemember.Location = new System.Drawing.Point(369, 83);
+        checkBoxRemember.Name = "checkBoxRemember";
+        checkBoxRemember.Size = new System.Drawing.Size(152, 24);
+        checkBoxRemember.TabIndex = 9;
+        checkBoxRemember.Text = "RememberCapt";
+        checkBoxRemember.UseVisualStyleBackColor = true;
+        // 
+        // checkBoxKey
+        // 
+        checkBoxKey.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)204));
+        checkBoxKey.Location = new System.Drawing.Point(12, 401);
+        checkBoxKey.Name = "checkBoxKey";
+        checkBoxKey.Size = new System.Drawing.Size(350, 35);
+        checkBoxKey.TabIndex = 10;
+        checkBoxKey.Text = "Key";
+        checkBoxKey.UseVisualStyleBackColor = true;
+        checkBoxKey.CheckedChanged += checkBoxKey_CheckedChanged;
+        // 
+        // Form1
+        // 
+        AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+        ClientSize = new System.Drawing.Size(534, 511);
+        Controls.Add(checkBoxKey);
+        Controls.Add(checkBoxRemember);
+        Controls.Add(checkBoxTranslate);
+        Controls.Add(treeViewModel);
+        Controls.Add(labelModel);
+        Controls.Add(OllamaButton);
+        Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)204));
+        FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+        Icon = ((System.Drawing.Icon)resources.GetObject("$this.Icon"));
+        Margin = new System.Windows.Forms.Padding(4);
+        MaximizeBox = false;
+        Text = "Alex";
+        FormClosed += Form1_FormClosed;
+        Move += Form1_Move;
+        contextMenuStrip1.ResumeLayout(false);
+        ResumeLayout(false);
+    }
+
+    private System.Windows.Forms.CheckBox checkBoxKey;
+
+    private System.Windows.Forms.CheckBox checkBoxRemember;
+
+    private System.Windows.Forms.CheckBox checkBoxTranslate;
+
+    private System.Windows.Forms.TreeView treeViewModel;
+
+    private System.Windows.Forms.Label labelModel;
+
+    private System.Windows.Forms.Button OllamaButton;
+
+    private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+    private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
+    private System.Windows.Forms.NotifyIcon notifyIcon1;
+
+    #endregion
 }

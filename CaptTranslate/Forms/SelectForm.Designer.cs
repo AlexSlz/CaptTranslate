@@ -33,17 +33,15 @@
             // 
             // SelectForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(800, 450);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            ClientSize = new System.Drawing.Size(800, 450);
             ControlBox = false;
-            FormBorderStyle = FormBorderStyle.None;
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "SelectForm";
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            Icon = ((System.Drawing.Icon)resources.GetObject("$this.Icon"));
             Opacity = 0.2D;
             TopMost = true;
-            WindowState = FormWindowState.Maximized;
             ResumeLayout(false);
         }
 

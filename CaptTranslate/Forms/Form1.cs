@@ -1,162 +1,261 @@
-using System.Diagnostics;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using CaptTranslate.TextRecognizers;
+using CaptTranslate.Translators;
 
-namespace CaptTranslate
+namespace CaptTranslate;
+
+public partial class Form1 : Form
 {
-    public partial class Form1 : Form
+    private readonly HotKeyManager _hotKeyManager;
+    
+    private readonly JsonAction<Settings> _saveSettings;
+    private readonly JsonAction<string[]> _ollamaModels;
+    
+    public Form1()
     {
-        private HotKeyManager _hotKeyManager;
+        InitializeComponent();
+        _saveSettings = new JsonAction<Settings>("settings.json", a => Settings.Singleton = a);
+        _ollamaModels = new JsonAction<string[]>("ollamaModels.json", a => Ollama.Models = a);
+        
+        _hotKeyManager = new HotKeyManager(Handle);
+        _hotKeyManager.AddHotKey(Settings.Singleton.ModKey, Settings.Singleton.Key, OpenSelectForm);
+        UpdateView();
+        UpdateStatusLabel();
+        
+        checkBoxTranslate.BindSetting(Settings.Singleton.Translate, (b) => Settings.Singleton.Translate = b);
+        checkBoxRemember.BindSetting(Settings.Singleton.RememberCapt, (b) => Settings.Singleton.RememberCapt = b);
+        checkBoxKey.Text = "Hot Key: " + GetHotkeyString() + (Keys)Settings.Singleton.Key;
+    }
 
-        public Form1()
+    private bool _firstCapt = true;
+    
+    private void OpenSelectForm()
+    {
+        if (Settings.Singleton.SelectedEngine == null || checkBoxKey.Checked) return;
+
+        if (_firstCapt || !checkBoxRemember.Checked)
         {
-            InitializeComponent();
-            _hotKeyManager = new HotKeyManager(Handle);
-            _hotKeyManager.AddHotKey(Settings.ModKEY, Settings.Key, OpenScreenForm);
+            FormManager.OpenForm<SelectForm>();
+            FormManager.AfterClose = () =>
+            {
+                if (!ImageData.IsSuccess) return;
+            
+                _firstCapt = !Settings.Singleton.RememberCapt;
+                CaptureAndShow();
+            };
+        }
+        else
+        {
+            CaptureAndShow();
+        }
+    }
+    private void CaptureAndShow()
+    {
+        var filePath = ScreenManager.CaptureScreen();
+        if (filePath != null) 
+        {
+            FormManager.OpenForm<TextForm>();
+        }
+    }
+    
+    protected override void WndProc(ref Message m)
+    {
+        const int wmHotkey = 0x0312;
 
-
-            comboBox1.Items.AddRange(Enum.GetNames(typeof(ListData.Translator)));
-            comboBox1.SelectedIndex = comboBox1.Items.IndexOf(Settings.Translator.ToString());
-
-            comboBox2.Items.AddRange(Enum.GetNames(typeof(ListData.Language)));
-            comboBox2.SelectedIndex = comboBox2.Items.IndexOf(Settings.Language.ToString());
-
-            numericUpDown1.Value = Settings.FontSize;
-
-            checkBox1.Checked = Settings.Translate;
-            checkBox4.Checked = Settings.RememberCapt;
+        if (m.Msg == wmHotkey)
+        {
+            _hotKeyManager.ProcessHotKey((int)m.WParam);
         }
 
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            string keyCombination = "";
-            Settings.ModKEY = 0;
-            if (e.Control)
-            {
-                keyCombination += "Ctrl + ";
-                Settings.ModKEY += 2;
-            }
-            if (e.Shift)
-            {
-                keyCombination += "Shift + ";
-                Settings.ModKEY += 4;
-            }
-            if (e.Alt)
-            {
-                keyCombination += "Alt + ";
-                Settings.ModKEY += 1;
-            }
-            keyCombination += e.KeyCode.ToString();
-            Settings.Key = e.KeyValue;
+        base.WndProc(ref m);
+    }
 
-            label4.Text = keyCombination;
+    private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        _saveSettings.Export(Settings.Singleton);
+    }
+
+    private void Form1_Move(object sender, EventArgs e)
+    {
+        if (this.WindowState == FormWindowState.Minimized)
+        {
+            this.Hide();
+            notifyIcon1.Visible = true;
         }
-        bool CanCapt = true;
-        private void OpenScreenForm()
-        {
-            if (checkBox3.Checked)
-                return;
+    }
 
-            if (CanCapt)
+    private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Left)
+            return;
+        if (this.Visible)
+        {
+            Hide();
+        }
+        else
+        {
+            Show();
+            this.WindowState = FormWindowState.Normal; 
+            this.BringToFront();                       
+            this.Activate();
+        }
+    }
+
+    private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Application.Exit();
+    }
+
+    private void UpdateView()
+    {
+        treeViewModel.BeginUpdate();
+        treeViewModel.Nodes.Clear();
+        var mainNode = new TreeNode("Models");
+        foreach (var engine in StaticData.Engines)
+        {
+            var engineNode = new TreeNode(engine.Name);
+            mainNode.Nodes.Add(engineNode);
+            
+            var models = engine.GetAvailableModels();
+
+            if (models == null) continue;
+            foreach (var model in models)
             {
-                FormManager.OpenForm<SelectForm>();
-                FormManager.AfterClose += () =>
+                var modelNode = new TreeNode(model) {Tag = engine };
+                engineNode.Nodes.Add(modelNode);
+                
+                if (model == Settings.Singleton.SelectedModel)
                 {
-                    if (!ImageData.CanCaptScreen)
-                        return;
-                    FormManager.OpenForm<TextForm>();
-                    if(Settings.RememberCapt)
-                        CanCapt = false;
-                };
+                    HighlightNode(modelNode);
+                }
             }
-            else
+        }
+        treeViewModel.Nodes.Add(mainNode);
+        
+        mainNode = new TreeNode("Translators");
+        foreach (var translator in StaticData.Translators)
+        {
+            var translatorNode = new TreeNode(translator.Name) {Tag = translator};
+            mainNode.Nodes.Add(translatorNode);
+            if (translator.Name == Settings.Singleton.SelectedTranslator)
             {
-                FormManager.OpenForm<TextForm>();
+                HighlightNode(translatorNode);
             }
         }
-
-        protected override void WndProc(ref Message m)
+        treeViewModel.Nodes.Add(mainNode);
+        
+        treeViewModel.ExpandAll();
+        treeViewModel.EndUpdate();
+        GC.Collect();
+    }
+    
+    private void HighlightNode(TreeNode node, Color backColor = default)
+    {
+        if (backColor == default) backColor = Color.LightGoldenrodYellow;
+        node.BackColor = backColor;
+        node.ForeColor = Color.Black;
+    }
+    
+    private async void OllamaButton_Click(object sender, EventArgs e)
+    {
+        using var ollama = new Ollama();
+        Cursor.Current = Cursors.WaitCursor;
+        this.Cursor = Cursors.WaitCursor; 
+        try 
         {
-            const int WM_HOTKEY = 0x0312;
-
-            if (m.Msg == WM_HOTKEY)
-            {
-                _hotKeyManager.ProcessHotKey((int)m.WParam);
-            }
-
-            base.WndProc(ref m);
+            var models = await ollama.GetModelList();
+            Ollama.Models = models;
+            _ollamaModels.Export(Ollama.Models);
+            UpdateView();
         }
-
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        finally 
         {
-            Application.Exit();
+            this.Cursor = Cursors.Default;
         }
-
-        private void Form1_Move(object sender, EventArgs e)
+    }
+    
+    private void treeViewModel_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+    {
+        if(e.Node == null) return;
+        
+        switch (e.Node.Tag)
         {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.Hide();
-                notifyIcon1.Visible = true;
-            }
-        }
-
-        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Left)
+            case null:
                 return;
-            if (this.Visible)
+            case IRecognizer engine:
             {
-                this.Hide();
+                var modelName = e.Node.Text;
+                engine.SelectModel(modelName);
+                
+                Settings.Singleton.SelectedEngine = engine.Name;
+                Settings.Singleton.SelectedModel = modelName;
+                break;
             }
-            else
-            {
-                this.Show();
+            case ITranslator translator:
+                Settings.Singleton.SelectedTranslator = translator.Name;
+                    break;
             }
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        UpdateView();
+        UpdateStatusLabel();
+    }
+    
+    private void UpdateStatusLabel()
+    {
+        var model = Settings.Singleton.SelectedModel ?? "None";
+        var translator = Settings.Singleton.SelectedTranslator ?? "None";
+        labelModel.Text = $@"{model} + {translator}";
+    }
+    
+    private void checkBoxKey_CheckedChanged(object sender, EventArgs e)
+    {
+        KeyPreview = checkBoxKey.Checked;
+        if (checkBoxKey.Checked)
         {
-            Settings.Translator = (ListData.Translator)comboBox1.SelectedIndex;
+            KeyDown += Form_KeyDown;
         }
-
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        else
         {
-            Settings.FontSize = (int)numericUpDown1.Value;
+            KeyDown -= Form_KeyDown;
+            _hotKeyManager.UpdateHotKey(Settings.Singleton.ModKey, Settings.Singleton.Key, OpenSelectForm);
         }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+    }
+    
+    private void Form_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Escape)
         {
-            Settings.Language = (ListData.Language)comboBox2.SelectedIndex;
-            TextRecognizer.SelectModel(Settings.Language);
+            checkBoxKey.Checked = false;
+            return;
         }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        
+        Settings.Singleton.ModKey = 0;
+        if (e.Control)
         {
-            Settings.Translate = checkBox1.Checked;
+            Settings.Singleton.ModKey += 2;
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        if (e.Shift)
         {
-            _hotKeyManager.UpdateHotKey(Settings.ModKEY, Settings.Key, OpenScreenForm);
+            Settings.Singleton.ModKey += 4;
         }
-
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        if (e.Alt)
         {
-            this.KeyPreview = checkBox3.Checked;
-            if (checkBox3.Checked)
-            {
-                this.KeyDown += new KeyEventHandler(MainForm_KeyDown);
-            }
-            else
-            {
-                this.KeyDown -= new KeyEventHandler(MainForm_KeyDown);
-                _hotKeyManager.UpdateHotKey(Settings.ModKEY, Settings.Key, OpenScreenForm);
-            }
+            Settings.Singleton.ModKey += 1;
         }
+        Settings.Singleton.Key = e.KeyValue;
+        checkBoxKey.Text = GetHotkeyString() + e.KeyCode;
+    }
+    
+    private string GetHotkeyString()
+    {
+        var mod = Settings.Singleton.ModKey;
+        
+        var res = "";
+        if ((mod & 2) != 0) res += "Ctrl + ";
+        if ((mod & 4) != 0) res += "Shift + ";
+        if ((mod & 1) != 0) res += "Alt + ";
 
-        private void checkBox4_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.RememberCapt = checkBox4.Checked;
-            CanCapt = true;
-        }
+        return res;
     }
 }

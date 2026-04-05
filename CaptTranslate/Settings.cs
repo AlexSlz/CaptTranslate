@@ -1,21 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace CaptTranslate
+namespace CaptTranslate;
+
+[Serializable]
+internal class Settings
 {
-    internal static class Settings
+    public static Settings Singleton = new();
+    
+    public string SelectedEngine = "Ollama";
+    public string SelectedModel = "glm-ocr:latest";
+    
+    public bool Translate = true;
+    public string TargetLanguage = "ru";
+    public string SelectedTranslator = "Google";
+    public string OllamaTranslationModel = "glm-ocr:latest";
+    
+    public int Key = 32; // 67 // 83 0x2C
+    public int ModKey = 2; //6
+    
+    public string Prompt = "OCR Mode: Extract all text from the image. " +
+                           "Output ONLY the recognized text. " +
+                           "No preamble, no commentary, no 'Here is the text'. " +
+                           "NO LaTeX, NO Markdown, NO HTML tag" +
+                           "Just the raw text from the image.";
+
+    public bool RememberCapt = false;
+    public bool Think = false;
+
+    public Settings()
     {
-        public static int FontSize = 20;
-        public static bool Translate = true;
-        public static bool RememberCapt = false;
+        Singleton = this;
+    }
+}
 
-        public static ListData.Translator Translator = ListData.Translator.Google;
-        public static ListData.Language Language = ListData.Language.English;
-
-        public static int ModKEY = 6; //6
-        public static int Key = 83; // 83 0x2C
+public static class SettingsBinder
+{
+    public static void BindSetting(this CheckBox control, bool init, Action<bool> onChange)
+    {
+        control.Checked = init;
+        
+        control.CheckedChanged += (s, e) =>
+        {
+            onChange?.Invoke(control.Checked);
+        };
     }
 }

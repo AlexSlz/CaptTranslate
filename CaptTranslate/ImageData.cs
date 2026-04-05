@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
-namespace CaptTranslate
+namespace CaptTranslate;
+
+internal static class ImageData
 {
-    internal class ImageData
-    {
-        public static Rectangle SelectedArea;
-        public static Point TextPoint;
-        public static bool CanCaptScreen;
-    }
+    public static Rectangle SelectedArea;
+    public static Point TextPoint;
+    public static bool IsSuccess;
 }

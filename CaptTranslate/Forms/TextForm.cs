@@ -60,7 +60,6 @@ public partial class TextForm : Form
             
             var result = await engine.ARecognize(data, _cts.Token);
             if (result.IsError || this.IsDisposed || _myLabel.IsDisposed) return;
-            
             _recognizedText = result.Text;
         }
         finally 
@@ -68,6 +67,13 @@ public partial class TextForm : Form
             this.Cursor = Cursors.Default;
             _myLabel.Text = _recognizedText;
         }
+        
+        if (string.IsNullOrEmpty(_myLabel.Text) || _myLabel.Text.Contains("```markdown")) 
+        {
+            this.Close();
+            return;
+        }
+        
         
         if (Settings.Singleton.Translate)
         {

@@ -14,6 +14,7 @@ internal static class FormManager
             form.FormClosed -= FormClosed;
             form.Dispose();
             GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
         _instance = null;
         AfterClose?.Invoke();

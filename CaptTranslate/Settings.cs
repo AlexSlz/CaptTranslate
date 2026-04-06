@@ -8,8 +8,8 @@ internal class Settings
 {
     public static Settings Singleton = new();
     
-    public string SelectedEngine = "Ollama";
-    public string SelectedModel = "glm-ocr:latest";
+    public string SelectedEngine = "PaddleOCR";
+    public string SelectedModel = "English";
     
     public bool Translate = true;
     public string TargetLanguage = "ru";

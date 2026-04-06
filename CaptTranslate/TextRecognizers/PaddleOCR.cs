@@ -34,7 +34,6 @@ public class PaddleOCR : IRecognizer
         {
             try
             {
-                // Используем локальную копию модели
                 var localModel = _currentModel;
 
                 using var src = Cv2.ImDecode(imageData, ImreadModes.Color);
@@ -54,8 +53,6 @@ public class PaddleOCR : IRecognizer
             finally
             {
                 _currentModel = null; 
-
-                GC.Collect();
             }
         }, ct);
     }

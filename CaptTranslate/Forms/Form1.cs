@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using CaptTranslate.TextRecognizers;
 using CaptTranslate.Translators;
@@ -166,7 +167,7 @@ public partial class Form1 : Form
     
     private async void OllamaButton_Click(object sender, EventArgs e)
     {
-        using var ollama = new Ollama();
+        var ollama = StaticData.GetEngine<Ollama>();
         Cursor.Current = Cursors.WaitCursor;
         this.Cursor = Cursors.WaitCursor; 
         try 

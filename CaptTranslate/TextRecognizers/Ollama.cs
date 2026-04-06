@@ -13,7 +13,7 @@ namespace CaptTranslate.TextRecognizers;
 public class Ollama : IRecognizer, IDisposable
 {
     public string Name => "Ollama";
-    private static readonly HttpClient HttpClient = new() {Timeout = TimeSpan.FromSeconds(30)};
+    private readonly HttpClient _httpClient = new() {Timeout = TimeSpan.FromSeconds(30)};
     private string _currentModel = "glm-ocr:latest";
     public static string[] Models = [];
     
@@ -26,7 +26,7 @@ public class Ollama : IRecognizer, IDisposable
     {
         try 
         {
-            using var response = await HttpClient.GetAsync("http://localhost:11434/api/tags");
+            using var response = await _httpClient.GetAsync("http://localhost:11434/api/tags");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -79,7 +79,7 @@ public class Ollama : IRecognizer, IDisposable
 
         try
         {
-            using var response = await HttpClient.PostAsync("http://localhost:11434/api/generate", content, ct);
+            using var response = await _httpClient.PostAsync("http://localhost:11434/api/generate", content, ct);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -104,14 +104,10 @@ public class Ollama : IRecognizer, IDisposable
         {
             return OperationResult.Failure<Ollama>(ex.Message);
         }
-        finally
-        {
-            GC.Collect();
-        }
     }
     
     public void Dispose()
     {
-        HttpClient?.Dispose();
+        _httpClient?.Dispose();
     }
 }

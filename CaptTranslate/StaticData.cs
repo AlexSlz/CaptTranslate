@@ -9,7 +9,7 @@ public static class StaticData
     public static IRecognizer[] Engines { get; } =
     [
         new Ollama(),
-        //new PaddleOCR()
+        new PaddleOCR()
     ];
     
     public static IRecognizer GetRecognizer()

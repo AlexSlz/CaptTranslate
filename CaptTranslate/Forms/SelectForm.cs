@@ -14,9 +14,6 @@ namespace CaptTranslate;
             InitializeComponent();
 
             this.KeyPreview = true;
-
-            KeyDown += ScreenForm_KeyDown;
-            MouseClick += ScreenForm_MouseClick;
             
             Rectangle allScreensBounds = Rectangle.Empty;
 
@@ -40,20 +37,16 @@ namespace CaptTranslate;
 
         }
 
-        private void ScreenForm_MouseClick(object sender, MouseEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
-            {
-                this.Close();
-            }
+            base.OnKeyDown(e);
+            if (e.KeyCode == Keys.Escape) this.Close();
         }
 
-        private void ScreenForm_KeyDown(object sender, KeyEventArgs e)
+        protected override void OnMouseClick(MouseEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-            {
-                this.Close();
-            }
+            base.OnMouseClick(e);
+            if (e.Button == MouseButtons.Right) this.Close();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -87,7 +80,6 @@ namespace CaptTranslate;
             ImageData.SelectedArea = _selectedArea;
             ImageData.TextPoint = this.PointToScreen(_startPoint);
             
-            GC.Collect();
             this.Close();
         }
         

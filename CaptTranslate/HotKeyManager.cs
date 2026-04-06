@@ -68,5 +68,11 @@ internal class HotKeyManager : IDisposable
         {
             Unregister(hotKey.Key);
         }
+        _actions.Clear();
+    }
+    
+    ~HotKeyManager()
+    {
+        Dispose();
     }
 }

@@ -36,8 +36,12 @@ public partial class TextForm : Form
     
     private void OnClose(object sender, FormClosingEventArgs e)
     {
+        this.KeyDown -= ScreenForm_KeyDown;
         _myLabel.MouseClick -= SwitchText;
+        this.FormClosing -= OnClose;
+    
         _cts.Cancel();
+        _cts.Dispose();
     }
 
     protected override void OnShown(EventArgs e)

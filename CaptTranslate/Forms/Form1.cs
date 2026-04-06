@@ -72,9 +72,16 @@ public partial class Form1 : Form
         base.WndProc(ref m);
     }
 
+    private void FormClose()
+    {
+        notifyIcon1.Visible = false;
+        _hotKeyManager.Dispose();
+        _saveSettings.Export(Settings.Singleton);
+    }
+    
     private void Form1_FormClosed(object sender, FormClosedEventArgs e)
     {
-        _saveSettings.Export(Settings.Singleton);
+        FormClose();
     }
 
     private void Form1_Move(object sender, EventArgs e)
@@ -148,7 +155,6 @@ public partial class Form1 : Form
         
         treeViewModel.ExpandAll();
         treeViewModel.EndUpdate();
-        GC.Collect();
     }
     
     private void HighlightNode(TreeNode node, Color backColor = default)

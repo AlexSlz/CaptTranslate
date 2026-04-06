@@ -13,19 +13,10 @@ namespace CaptTranslate.TextRecognizers;
 public class Ollama : IRecognizer, IDisposable
 {
     public string Name => "Ollama";
-    private readonly HttpClient _httpClient;
+    private static readonly HttpClient HttpClient = new() {Timeout = TimeSpan.FromSeconds(30)};
     private string _currentModel = "glm-ocr:latest";
     public static string[] Models = [];
     
-    public Ollama()
-    {
-        _httpClient = new HttpClient 
-        { 
-            BaseAddress = new Uri("http://localhost:11434"),
-            Timeout = TimeSpan.FromSeconds(30)
-        };
-    }
-
     public string[] GetAvailableModels()
     {
         return Models;
@@ -35,7 +26,7 @@ public class Ollama : IRecognizer, IDisposable
     {
         try 
         {
-            using var response = await _httpClient.GetAsync("/api/tags");
+            using var response = await HttpClient.GetAsync("http://localhost:11434/api/tags");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -88,31 +79,39 @@ public class Ollama : IRecognizer, IDisposable
 
         try
         {
-            using var response = await _httpClient.PostAsync("/api/generate", content, ct);
+            using var response = await HttpClient.PostAsync("http://localhost:11434/api/generate", content, ct);
 
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadAsStringAsync();
                 return OperationResult.Failure<Ollama>(error);
             }
-        
+
             var json = await response.Content.ReadFromJsonAsync<JsonElement>();
-            
+
             if (json.TryGetProperty("response", out var respProp))
             {
                 return OperationResult.Success(respProp.GetString());
             }
- 
+
             return OperationResult.Failure<Ollama>("Not Found");
         }
-        catch(OperationCanceledException)
+        catch (OperationCanceledException)
         {
             return OperationResult.Success("");
+        }
+        catch (Exception ex)
+        {
+            return OperationResult.Failure<Ollama>(ex.Message);
+        }
+        finally
+        {
+            GC.Collect();
         }
     }
     
     public void Dispose()
     {
-        _httpClient?.Dispose();
+        HttpClient?.Dispose();
     }
 }

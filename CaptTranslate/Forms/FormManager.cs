@@ -9,6 +9,12 @@ internal static class FormManager
     public static Action AfterClose;
     private static void FormClosed(object sender, FormClosedEventArgs e)
     {
+        if (sender is Form form)
+        {
+            form.FormClosed -= FormClosed;
+            form.Dispose();
+            GC.Collect();
+        }
         _instance = null;
         AfterClose?.Invoke();
         AfterClose = null;
